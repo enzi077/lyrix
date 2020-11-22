@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import React from 'react'
+import React, { useState } from 'react'
 import { ScrollView } from 'react-native'
 import {LYRICS_MATCHER} from '../utils/apolloQueries'
 import {Paragraph,Text, ActivityIndicator} from 'react-native-paper'
@@ -11,12 +11,18 @@ const LyricsMatcher = ({track,artist}) => {
 
     if(loadingLyricsMatcher) return <ActivityIndicator style={{top:'50%'}}/>
     if(errorLyricsMatcher) return <Text>{`${errorLyricsMatcher}`}</Text>
+    
     const {resMatcherLyrics:{message:{body:{lyrics:{lyrics_copyright,lyrics_body}}}}}=dataLyricsMatcher
     return (
-        <ScrollView overScrollMode='always'>
-            <Paragraph style={{opacity:0.8}}>{lyrics_body.split('...')[0]}</Paragraph>
-            <Paragraph style={{fontWeight: "bold"}}>{lyrics_copyright}</Paragraph>
-        </ScrollView>
+        <>
+            {
+                lyrics_body && lyrics_copyright &&
+                <ScrollView overScrollMode='always'>
+                    <Paragraph style={{opacity:0.8}}>{lyrics_body.split('...')[0]}</Paragraph>
+                    <Paragraph style={{fontWeight: "bold"}}>{lyrics_copyright}</Paragraph>
+                </ScrollView>
+            }
+        </>
     )
 }
 
