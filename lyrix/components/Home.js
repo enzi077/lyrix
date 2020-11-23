@@ -3,7 +3,7 @@ import { ScrollView, TouchableOpacity, View } from 'react-native'
 import {SafeAreaView} from 'react-native-safe-area-context'
 import {useQuery} from '@apollo/client'
 import {CHART_ARTISTS, CHART_TRACKS, ARTIST_DETAIL} from '../utils/apolloQueries'
-import { Appbar, Portal, Text, Title, Subheading, List, Divider,Card, Avatar, Modal, ActivityIndicator} from 'react-native-paper'
+import { Appbar, Portal, Text, Title, Subheading, List, Divider,Card, Avatar, Modal, ActivityIndicator, Snackbar} from 'react-native-paper'
 import {styles} from '../styles/homeStyles'
 
 const LeftContent=(props)=> <Avatar.Icon {...props} icon="music-clef-treble"/>
@@ -34,10 +34,34 @@ const Home = ({navigation}) => {
     
     // loaders and errors
     if(loadingChartArtists) return <ActivityIndicator style={{top:'50%'}}/>
-    if(errorChartArtists) return <Text>{`${errorChartArtists}`}</Text>
+    if(errorChartArtists) return(
+        <Snackbar
+            visible={visible}
+            onDismiss={()=>setVisible(false)}
+            duration={3000}
+        >
+            Error loading chart artists
+        </Snackbar>
+    )
     if(loadingChartTracks) return <ActivityIndicator style={{top:'50%'}}/>
-    if(errorChartTracks) return <Text>{`${errorChartTracks}`}</Text>
-    if(errorArtist) return <Text>{`${errorArtist}`}</Text>
+    if(errorChartTracks) return(
+        <Snackbar
+            visible={visible}
+            onDismiss={()=>setVisible(false)}
+            duration={3000}
+        >
+            Error loading chart tracks
+        </Snackbar>
+    )
+    if(errorArtist) return(
+        <Snackbar
+            visible={visible}
+            onDismiss={()=>setVisible(false)}
+            duration={3000}
+        >
+            Error loading artists details
+        </Snackbar>
+    )
     
     //functions
     const showModal=(id)=>{
@@ -72,6 +96,7 @@ const Home = ({navigation}) => {
             <ScrollView 
                 style={styles.home__scrollView}
                 overScrollMode='always'
+                keyboardShouldPersistTaps='always'
             >
                 <View style={styles.home__viewMain}>
                     <View style={styles.home__viewArtist}>

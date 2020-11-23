@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { View } from 'react-native'
 import { ScrollView} from 'react-native-gesture-handler'
 import {TRACK_SEARCH} from '../utils/apolloQueries'
-import { Appbar, Text, TextInput, Button, Card, Avatar, ActivityIndicator, Snackbar} from 'react-native-paper'
+import { Appbar, TextInput, Button, Card, Avatar, ActivityIndicator, Snackbar} from 'react-native-paper'
 import {styles} from '../styles/searchLyricsStyles'
 
 const LeftContent=(props)=> <Avatar.Icon {...props} icon="music-clef-treble"/>
@@ -30,7 +30,15 @@ const SearchLyrics = ({navigation}) => {
     }
     
     if(loadingTrackSearch) return <ActivityIndicator style={{top:'50%'}}/>
-    if(errorTrackSearch) return <Text>{`${errorTrackSearch}`}</Text>
+    if(errorTrackSearch) return(
+        <Snackbar
+            visible={visible}
+            onDismiss={()=>setVisible(false)}
+            duration={3000}
+        >
+            No lyrics available
+        </Snackbar>
+    )
     
     if(dataTrackSearch && notifyUpd){
         const {resTrackSearch:{message:{body:{track_list}}}}=dataTrackSearch
@@ -45,6 +53,7 @@ const SearchLyrics = ({navigation}) => {
             <ScrollView
                 style={styles.searchLyrics__scrollView}
                 overScrollMode='always'
+                keyboardShouldPersistTaps='always'
             >
                 <TextInput
                     onChangeText={(text)=>setSearchText(text)}

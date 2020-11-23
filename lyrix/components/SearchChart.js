@@ -3,7 +3,7 @@ import React from 'react'
 import { ScrollView,View } from 'react-native'
 import {SafeAreaView} from 'react-native-safe-area-context'
 import {TRACK_LYRICS} from '../utils/apolloQueries'
-import { Appbar,Text,Title, Paragraph,Subheading,Divider, ActivityIndicator} from 'react-native-paper'
+import { Appbar,Text,Title, Paragraph,Subheading,Divider, ActivityIndicator, Snackbar} from 'react-native-paper'
 import {styles} from '../styles/searchChartStyles'
 
 function SearchChart({route,navigation:{goBack}}) {
@@ -15,7 +15,15 @@ function SearchChart({route,navigation:{goBack}}) {
     )
     
     if(loadingTrackLyrics) return <ActivityIndicator style={{top:'50%'}}/>
-    if(errorTrackLyrics) return <Text>{`${errorTrackLyrics}`}</Text>
+    if(errorTrackLyrics) return(
+        <Snackbar
+            visible={visible}
+            onDismiss={()=>setVisible(false)}
+            duration={3000}
+        >
+            No lyrics available
+        </Snackbar>
+    )
     
     const {resTrackLyrics:{message:{body:{lyrics}}}}=dataTrackLyrics
   return (
@@ -29,6 +37,7 @@ function SearchChart({route,navigation:{goBack}}) {
             <ScrollView
                 style={styles.searchChart__scrollView}
                 overScrollMode='always'
+                keyboardShouldPersistTaps='always'
             >
                 <View key={lyrics.lyrics_id}>
                     <Title>{trackName}</Title>

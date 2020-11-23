@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ScrollView} from 'react-native-gesture-handler'
 import LyricsMatcher from './LyricsMatcher'
 import {Appbar,TextInput, Button} from 'react-native-paper'
 import {styles} from '../styles/searchFocusStyles'
-import { View } from 'react-native'
+import { Keyboard, View } from 'react-native'
 
 const SearchFocus = ({navigation}) => {
     const [searchTrack,setSearchTrack]=useState('')
@@ -13,13 +13,13 @@ const SearchFocus = ({navigation}) => {
     const [ticker,setTicker]=useState(false)
     
     const loadLyricsMatcher=()=>{
-        setTicker(true)
         setQueryArtist(searchArtist)
         setQueryTrack(searchTrack)
         setSearchTrack('')
         setSearchArtist('')
+        setTicker(true)
+        Keyboard.dismiss()
     }
-    
     
     return (
         <>
@@ -34,6 +34,7 @@ const SearchFocus = ({navigation}) => {
             <ScrollView
                 style={styles.searchFocus__scrollView}
                 overScrollMode='always'
+                keyboardShouldPersistTaps='always'
             >
                 <TextInput
                     onChangeText={(text)=>setSearchTrack(text)}
